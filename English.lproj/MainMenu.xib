@@ -663,8 +663,8 @@
                         <color key="fillColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                     </qtCaptureView>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="NKX-1o-S7a">
-                        <rect key="frame" x="18" y="0.0" width="352" height="29"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                        <rect key="frame" x="190.99999786376947" y="0.0" width="179" height="29"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxY="YES"/>
                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="center" title="--" id="Xcp-93-F3j">
                             <font key="font" metaFont="system" size="24"/>
                             <color key="textColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
@@ -683,7 +683,7 @@
                         </connections>
                     </button>
                     <levelIndicator verticalHuggingPriority="750" id="539">
-                        <rect key="frame" x="20" y="25" width="348" height="16"/>
+                        <rect key="frame" x="20" y="25" width="347.99999786376947" height="16"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                         <levelIndicatorCell key="cell" alignment="left" doubleValue="2" maxValue="100" warningValue="2" criticalValue="2" levelIndicatorStyle="continuousCapacity" id="540"/>
                     </levelIndicator>
@@ -695,6 +695,15 @@
                             <action selector="threshold:" target="536" id="4FO-hr-KBn"/>
                         </connections>
                     </slider>
+                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="0Vm-tC-Frb">
+                        <rect key="frame" x="18" y="0.0" width="169" height="29"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="center" id="ydX-36-YtB">
+                            <font key="font" metaFont="system" size="24"/>
+                            <color key="textColor" red="0.0" green="0.0" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
                 </subviews>
             </view>
         </window>
@@ -709,6 +718,7 @@
                 <outlet property="countLabel" destination="NKX-1o-S7a" id="Dtn-yd-D6u"/>
                 <outlet property="level" destination="539" id="541"/>
                 <outlet property="mCaptureView" destination="533" id="538"/>
+                <outlet property="startCountLabel" destination="0Vm-tC-Frb" id="Lzi-fQ-llK"/>
                 <outlet property="threshold" destination="yUJ-Mm-DKH" id="4Rw-yN-8xe"/>
             </connections>
         </customObject>

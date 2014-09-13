@@ -131,6 +131,7 @@
 		countLabel.textColor = [NSColor blueColor];
 		countLabel.hidden = NO;
 		countLabel.intValue = [[defaultSettings valueForKey:@"FileNumber"] intValue];
+		startCountLabel.intValue = countLabel.intValue + 1;
 	}
 	countLabel.intValue++;
 	if (countLabel.intValue > 100)

@@ -28,6 +28,7 @@ typedef struct { unsigned char r, g, b, a; } BPixel;
 	BOOL detection;
 	BOOL takeScreenshot;
 	IBOutlet NSTextField *countLabel;
+	IBOutlet NSTextField *startCountLabel;
 	int countImages;
 	float detectedArea;
 	float previousAverageMagnitud;
