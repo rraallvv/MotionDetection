@@ -112,6 +112,9 @@
 		sender.title = @"Capture";
 		
 		[self stopDetection];
+		
+		NSURL *folderURL = [NSURL fileURLWithPath: @"/Users/Shared/Screenshots"];
+		[[NSWorkspace sharedWorkspace] openURL: folderURL];
     }
 }
 
@@ -144,6 +147,8 @@
 														userInfo:nil
 														 repeats:NO];
 	});
+	
+	takeScreenshot = YES;
 	
 	dispatch_async(dispatch_get_main_queue(), ^{
 		screenshotTimer = [NSTimer scheduledTimerWithTimeInterval:kScreenshoTime
@@ -203,7 +208,7 @@
 
 - (void)captureOutput:(QTCaptureFileOutput *)captureOutput didFinishRecordingToOutputFileAtURL:(NSURL *)outputFileURL forConnections:(NSArray *)connections dueToError:(NSError *)error
 {
-    [[NSWorkspace sharedWorkspace] openURL:outputFileURL];
+    //[[NSWorkspace sharedWorkspace] openURL:outputFileURL];
 }
 
 - (void)windowWillClose:(NSNotification *)notification
@@ -247,8 +252,11 @@
 		NSBitmapImageRep *imageRep = [NSBitmapImageRep imageRepWithData:imageData];
 		NSDictionary *imageProps = [NSDictionary dictionaryWithObject:[NSNumber numberWithFloat:0.9] forKey:NSImageCompressionFactor];
 		imageData = [imageRep representationUsingType:NSJPEGFileType properties:imageProps];
-		NSString *filename = [NSString stringWithFormat: @"/Users/Shared/My Movie %03d-%03d.jpg", countLabel.intValue, countImages];
+		NSString *filename = [NSString stringWithFormat: @"/Users/Shared/Screenshots/My Movie %03d-%03d.jpg", countLabel.intValue, countImages];
 		[imageData writeToFile:filename atomically:NO];
+		
+		//NSString *aliasFilename = [@"/Users/Shared/Screenshots/" stringByAppendingString:[filename lastPathComponent]];
+		//[[NSFileManager defaultManager] createSymbolicLinkAtPath:aliasFilename withDestinationPath:filename error:nil];
 		
 		countImages++;
 		takeScreenshot = NO;
