@@ -11,6 +11,7 @@
 #define kStartTime	60
 #define kMinTime	5
 #define kMaxTime	180
+#define kScreenshoTime	5
 
 @implementation VideoController
 
@@ -118,12 +119,10 @@
 	[defaultSettings setFloat:sender.floatValue forKey:@"Threshold"];
 }
 
-- (void) minLengthTimerExpired:(NSTimer *)sender {
-	[self stopDetection];
-}
-
 - (void) startDetection {
 	NSLog(@"Recording");
+	
+	countImages = 1;
 	
 	if (countLabel.isHidden) {
 		countLabel.textColor = [NSColor blueColor];
@@ -145,6 +144,14 @@
 														userInfo:nil
 														 repeats:NO];
 	});
+	
+	dispatch_async(dispatch_get_main_queue(), ^{
+		screenshotTimer = [NSTimer scheduledTimerWithTimeInterval:kScreenshoTime
+														   target:self
+														 selector:@selector(screenshotTimerExpired:)
+														 userInfo:nil
+														  repeats:NO];
+	});
 }
 
 - (void) stopDetection {
@@ -155,6 +162,10 @@
 	if (maxLengthTimer) {
 		[maxLengthTimer invalidate];
 		maxLengthTimer = nil;
+	}
+	if (screenshotTimer) {
+		[screenshotTimer invalidate];
+		screenshotTimer = nil;
 	}
 	if (mCaptureMovieFileOutput.outputFileURL) {
 		NSLog(@"Saving File");
@@ -171,8 +182,23 @@
 	}
 }
 
+- (void) minLengthTimerExpired:(NSTimer *)sender {
+	[self stopDetection];
+}
+
 - (void) maxLengthTimerExpired:(NSTimer*)sender {
 	[self stopDetection];
+}
+
+- (void) screenshotTimerExpired:(NSTimer*)sender {
+	takeScreenshot = YES;
+	dispatch_async(dispatch_get_main_queue(), ^{
+		screenshotTimer = [NSTimer scheduledTimerWithTimeInterval:kScreenshoTime
+														   target:self
+														 selector:@selector(screenshotTimerExpired:)
+														 userInfo:nil
+														  repeats:NO];
+	});
 }
 
 - (void)captureOutput:(QTCaptureFileOutput *)captureOutput didFinishRecordingToOutputFileAtURL:(NSURL *)outputFileURL forConnections:(NSArray *)connections dueToError:(NSError *)error
@@ -211,6 +237,24 @@
 	
 	
 	CGSize size = image.extent.size;
+	
+	if (takeScreenshot) {
+		NSCIImageRep *rep = [NSCIImageRep imageRepWithCIImage:image];
+		NSImage *nsImage = [[NSImage alloc] initWithSize:size];
+		[nsImage addRepresentation:rep];
+		
+		NSData *imageData = [nsImage TIFFRepresentation];
+		NSBitmapImageRep *imageRep = [NSBitmapImageRep imageRepWithData:imageData];
+		NSDictionary *imageProps = [NSDictionary dictionaryWithObject:[NSNumber numberWithFloat:0.9] forKey:NSImageCompressionFactor];
+		imageData = [imageRep representationUsingType:NSJPEGFileType properties:imageProps];
+		NSString *filename = [NSString stringWithFormat: @"/Users/Shared/My Movie %03d-%03d.jpg", countLabel.intValue, countImages];
+		[imageData writeToFile:filename atomically:NO];
+		
+		countImages++;
+		takeScreenshot = NO;
+		
+		NSLog(@"Screenshot saved");
+	}
 	
 	int width, height;
 	
